@@ -1,0 +1,155 @@
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Лабораторная работа №5</title>
+	<script type="text/javascript">
+		function Record(text,date) {
+			this.text=text;
+			this.date=date;
+			this.time= function() {
+				return this.date.toLocaleTimeString();
+			}
+			this.day = function() {
+				return this.date.toLocaleDateString();
+			}
+		}
+		
+		var records=[
+			new Record("Я проснулся!",
+				new Date(2013, 10, 19, 07, 00, 0, 0)),
+			new Record("Умываюсь...",
+				new Date(2013, 10, 19, 07, 10, 0, 0)),
+			new Record("Пошел варить кофе",
+				new Date(2013, 10, 19, 07, 20, 0, 0)),
+			new Record("Куда опять ключи подевались?",
+				new Date(2013, 10, 19, 07, 50, 0, 0)),
+			new Record("Опять опаздываю",
+				new Date(2013, 10, 19, 08, 05, 0, 0))
+		];
+		
+		function time(date) {
+			return ""+date.toLocaleTimeString();
+		}
+		
+		function day(date) {
+			return "" + date.toLocaleDateString();
+		}
+		
+		function displayRecords() {
+			var text = "";
+			var odd = true;
+			for (var i in records) {
+				if (odd) {
+					text += "<p style='background-color:gray'>";
+				} else {
+					text += "<p style='background-color:lightgray'>";
+				}
+				odd = !odd;
+				text += records[i].time() + " ";
+				text += "<strong>" +records[i].day() + "</strong><br>";
+				text += records[i].text + "</p>";
+			}
+			document.getElementById("records_place").innerHTML = text;
+		}
+		function send() {
+			var r=new Record(
+				document.getElementById("newtext").value,
+					new Date());
+			records.push(r);
+			displayRecords();
+		}
+		
+		function sort(compare) {
+			var l=records.length;
+			
+			for (var i=0; i<l-1; i++) {
+				var j_min = i;
+				for (var j=i+1; j<l; j++) {
+					if (compare(records[j],records[j_min])) {
+						j_min=j;
+					}
+				}
+				
+				var r=records[j_min];
+				records[j_min]=records[i];
+				records[i] = r;
+			}
+			displayRecords();
+		}
+		
+		var comparers = [
+			function comp1(r1,r2) {
+				return r1.date < r2.date;
+			},
+			
+			function comp2(r1,r2) {
+				return r1.date > r2.date;
+			},
+			
+			function comp3(r1,r2) {
+				return r1.text < r2.text;
+			},
+			
+			function comp4(r1,r2) {
+				return r1.text > r2.text;
+			}
+		];
+		
+	</script>
+	
+	<script type="text/javascript">
+		var lastResFind=""; 
+		var copy_page=""; 
+		function TrimStr(s) {
+			s = s.replace( /^\s+/g, '');
+		return s.replace( /\s+$/g, '');
+		}
+		function FindOnPage(inputId) {
+		var obj = window.document.getElementById(inputId);
+		var textToFind;
+		
+		if (obj) {
+			textToFind = TrimStr(obj.value);
+		} else {
+			alert("Введенная фраза не найдена");
+			return;
+		}
+		if (textToFind == "") {
+			alert("Вы ничего не ввели");
+			return;
+		}
+ 
+		if(document.body.innerHTML.indexOf(textToFind)=="-1")
+		alert("Ничего не найдено, проверьте правильность ввода!");
+ 
+		if(copy_page.length>0)
+				document.body.innerHTML=copy_page;
+		else copy_page=document.body.innerHTML;
+
+ 
+		document.body.innerHTML = document.body.innerHTML.replace(eval("/name="+lastResFind+"/gi")," ");
+		document.body.innerHTML = document.body.innerHTML.replace(eval("/"+textToFind+"/gi"),"<a name="+textToFind+" style='background:red'>"+textToFind+"</a>");
+		lastResFind=textToFind;
+		window.location = '#'+textToFind;
+	}
+</script>
+
+</head>
+<body onload="displayRecords()">
+	<div id="toolbar">
+		<input type="text" id="newtext"/>
+		<input type="button" value="Добавить запись" onclick="send()"/>
+		<input type="button" value="По дате ->" onclick="sort(comparers[0])"/>
+		<input type="button" value="По дате <-" onclick="sort(comparers[1])"/>
+		<input type="button" value="По алфавиту->" onclick="sort(comparers[2])"/>
+		<input type="button" value="По алфавиту<-" onclick="sort(comparers[3])"/>
+		<input type="button" value="Утренние записи" onclick="sort(comparers[5])"/>
+		
+		<input type="text" id="text-to-find" value=""> 
+		<input type="button" onclick="javascript: FindOnPage('text-to-find'); return false;" value="Искать"/>
+	</div>
+	
+	<div id="records_place">
+	</div>
+</body>
+</html>
