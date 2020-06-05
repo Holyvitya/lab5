@@ -1,0 +1,231 @@
+<html>
+<head>
+	<meta charset="utf-8" />
+    <style>
+        table {
+            width: 50%;
+            border-spacing: 3px;
+            float: center;
+            border: line 4px rgb(32, 104, 86);
+        }
+        td {
+            text-align: center;
+            padding: 5px;
+        }
+        th {
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+        }
+        span {
+            color:red;
+        }
+    </style>
+    <script>
+        var records=[];
+        var check1;
+        var check2;
+        var check3;
+        var check4;
+        var check5;
+
+        function Record(name, sname, email, phone, bdate) {
+            this.name=name;
+            this.sname=sname;
+            this.email=email;
+            this.phone=phone;
+            this.bdate=bdate;
+        }
+
+        function send(){
+            
+            var name = document.getElementById("name").value;
+            
+            var sname = document.getElementById("sname").value;
+            
+            var email = document.getElementById("email").value;
+            
+            var phone = document.getElementById("phone").value;
+            
+            var bdate = document.getElementById("bdate").value;
+            
+
+            var r = new Record(name, sname, email, phone, bdate);
+            records.push(r);
+            displayRecords();
+        }
+
+        function checkAll(){
+            checkName(document.getElementById("name"));
+            checkSName(document.getElementById("sname"));
+            checkEmail(document.getElementById("email"));
+            checkPhone(document.getElementById("phone"));
+            checkDate(document.getElementById("bdate"));
+            if (check1 && check2 && check3 && check4 && check5==1){
+                enable();
+            } else {
+                disable();
+            }
+        }
+
+        function checkName(){
+            label = document.getElementById(document.getElementById("name").id + "mes");
+            if (!isCorrectFIO1()){
+                label.innerHTML="Некорректно введено Имя";
+                check1=2;
+            } else if (isCorrectFIO1()){
+                label.innerHTML="";
+                check1=1;
+            } else {
+                label.innerHTML="";
+            }
+        }
+
+        function isCorrectFIO1(){
+            var reg = /^[А-ЯЁа-яё]+$/;
+            return reg.test(document.getElementById("name").value);
+        }
+
+        function checkSName(){
+            label = document.getElementById(document.getElementById("sname").id + "mes");
+            if (!isCorrectFIO()){
+                label.innerHTML="Некорректно введено Имя";
+                check2=2;
+            } else if (isCorrectFIO()){
+                label.innerHTML="";
+                check2=1;
+            } else {
+                label.innerHTML="";
+            }
+        }
+
+        function isCorrectFIO(){
+            var reg = /^[А-ЯЁа-яё]+$/;
+            return reg.test(document.getElementById("sname").value);
+        }
+
+        function checkDate(){
+            label = document.getElementById(document.getElementById("bdate").id + "mes");
+            if (!isCorrectDate()){
+                label.innerHTML="Некорректно введена дата!";
+                check5=2;
+            } else if (isCorrectDate()){
+                label.innerHTML="";
+                check5=1;
+            } else {
+                label.innerHTML="";
+            }
+        }
+
+        function isCorrectDate(){
+            var dataRegex=/^\d{2}(\/|\.)\d{2}(\/|\.)\d{4}$/;
+            return dataRegex.test(document.getElementById("bdate").value);
+        }
+
+        function checkPhone(){
+            label = document.getElementById(document.getElementById("phone").id + "mes");
+            if (!isCorrectPhone()){
+                label.innerHTML="Некорректно введен номер";
+                check4=2;
+            } else if (isCorrectPhone()){
+                label.innerHTML="";
+                check4=1;
+            } else {
+                label.innerHTML="";
+            }
+        }
+
+        function isCorrectPhone(){
+            var reg = /^(8|(\+7))[\s\-]?\d{3}[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
+            return reg.test(document.getElementById("phone").value);
+        }
+
+        function checkEmail(){
+            label = document.getElementById(document.getElementById("email").id + "mes");
+            if (!isCorrectEmail()){
+                label.innerHTML="Некорректно введен e-mail";
+                check3=2;
+            } else if (isCorrectEmail()){
+                label.innerHTML="";
+                check3=1;
+            } else {
+                label.innerHTML="";
+            }
+        }
+
+        function isCorrectEmail() {
+            var reg = /^\w+@[a-zA-Z]+?\.[a-zA-Z]{2,6}$/;
+            return reg.test(document.getElementById("email").value);
+        }
+
+        function enable(){
+            document.getElementById("send").disabled = false;
+        }
+        function disable(){
+            document.getElementById("send").disabled = true;
+        }
+        function displayRecords(){
+            var text1="";
+            var text2="";
+            var text3="";
+            var text4="";
+            var text5="";
+            var odd=true;
+            for (var i in records){
+                if (odd) {
+                    text1 += "<p style='background-color:gray'>";
+                    text2 += "<p style='background-color:gray'>";
+                    text3 += "<p style='background-color:gray'>";
+                    text4 += "<p style='background-color:gray'>";
+                    text5 += "<p style='background-color:gray'>";
+                }   else {
+                    text1 +="<p style='background-color:lightgray'>";
+                    text2 +="<p style='background-color:lightgray'>";
+                    text3 +="<p style='background-color:lightgray'>";
+                    text4 +="<p style='background-color:lightgray'>";
+                    text5 +="<p style='background-color:lightgray'>";
+                }
+                odd = !odd;
+
+                text1 += document.getElementById("name").value;
+                text2 += document.getElementById("sname").value;
+                text3 += document.getElementById("email").value;
+                text4 += document.getElementById("phone").value;
+                text5 += document.getElementById("bdate").value;
+            }
+            // document.getElementById("records_place").innerHTML=text;
+
+            document.getElementById("td1").innerHTML=text1;
+            document.getElementById("td2").innerHTML=text2;
+            document.getElementById("td3").innerHTML=text3;
+            document.getElementById("td4").innerHTML=text4;
+            document.getElementById("td5").innerHTML=text5;
+        }
+    </script>
+</head>
+<body onload="disable()">
+    Фамилия <input type="text" id="name" onkeyup="checkAll()" onblur="checkAll()"/><span id="namemes"></span><br>
+    Имя <input type="text" id="sname" onkeyup="checkAll()" onblur="checkAll()"/><span id="snamemes"></span><br>
+    E-mail <input type="text" id="email" onkeyup="checkAll()" onblur="checkAll()"/><span id="emailmes"></span><br>
+    Телефон <input type="text" id="phone" onkeyup="checkAll()" onblur="checkAll()"/><span id="phonemes"></span><br>
+    Дата рождения <input type="text" id="bdate" onkeyup="checkAll()" onblur="checkAll()"/><span id="bdatemes"></span><br>
+    <input id="send" type="button" value="Добавить запись" onclick="send()"/>
+    <table id="records_place">
+        <tr>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>E-mail</th>
+            <th>Телефон</th>
+            <th>Дата рождения</th>
+        </tr>
+        <tr>
+            <td id="td1"></td>
+            <td id="td2"></td>
+            <td id="td3"></td>
+            <td id="td4"></td>
+            <td id="td5"></td>
+        </tr>
+        
+    </table>
+</body>
+</html>
